@@ -13,9 +13,9 @@ MOVE_UP_BUTTON = document.getElementById('MUB'),
 MOVE_DOWN_BUTTON = document.getElementById('MDB'),
 SPEED_SLIDER = document.getElementById('SpeedSlider');
 
-const CONSTANT_RADIUS = 1;
+const CONSTANT_RADIUS = 10;
 const SETS = [];
-const NUMBER_OF_SETS = Math.floor(innerHeight*0.4);
+const NUMBER_OF_SETS = Math.floor(innerHeight*0.05);
 console.log(NUMBER_OF_SETS)
 
 function moveLeft(ev){
