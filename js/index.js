@@ -13,9 +13,9 @@ MOVE_UP_BUTTON = document.getElementById('MUB'),
 MOVE_DOWN_BUTTON = document.getElementById('MDB'),
 SPEED_SLIDER = document.getElementById('SpeedSlider');
 
-const CONSTANT_RADIUS = 10;
+const CONSTANT_RADIUS = 5;
 const SETS = [];
-const NUMBER_OF_SETS = Math.floor(innerHeight*0.05);
+const NUMBER_OF_SETS = Math.floor(innerHeight*0.5);
 console.log(NUMBER_OF_SETS)
 
 function moveLeft(ev){
@@ -76,7 +76,11 @@ const init = ()=>{
     const pc_height = getHeight(PRIME_CANVAS);
 
     for(let i = 0; i < NUMBER_OF_SETS; i++){
-        SETS.push(new CircleNumberSet(i+1, CONSTANT_RADIUS, Math.round(pc_width/CONSTANT_RADIUS), pc_width,pc_height));
+        const CNS = new CircleNumberSet(i+1, CONSTANT_RADIUS, Math.round(pc_width/CONSTANT_RADIUS), pc_width,pc_height);
+        CNS.set.forEach( s => {
+            s.color = `hsl(${scale(s.number,0,NUMBER_OF_SETS,0,360)} 100% 50%)`;
+        })
+        SETS.push(CNS);
     }
     // for(let j = 0; j < SETS.length; j++){
     //     SETS[j].renderSet(PC_CTX);

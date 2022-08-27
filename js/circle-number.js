@@ -1,6 +1,6 @@
 "use strict";
 
-import { isPrime } from "./utilities.js";
+import { scale, isPrime } from "./utilities.js";
 
 export class CircleNumber{
     #TWO_PI;
@@ -8,7 +8,7 @@ export class CircleNumber{
         this.position = {x: x, y: y};
         this.radius = r * n;
         this.number = n;
-        this.color = isPrime(this.number) ? 'yellow':'white';
+        this.color = `hsl(${scale(this.number,0,3,0,360)} 100% 50%)` //isPrime(this.number) ? 'red':'white';
         this.#TWO_PI = Math.PI*2;
     }
     moveToRight(s){
@@ -39,6 +39,10 @@ export class CircleNumber{
     render(ctx){
         ctx.beginPath();
         ctx.strokeStyle = this.color;
+        // ctx.font = `${this.number*2}px`;
+        // ctx.fillStyle = 'white';
+        // ctx.textAlign = 'center';
+        // ctx.fillText(`${this.number}`, this.position.x, this.position.y - this.radius)
         ctx.arc(this.position.x, this.position.y, this.radius, 0, this.#TWO_PI);
         ctx.stroke();
     }
