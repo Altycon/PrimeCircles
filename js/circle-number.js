@@ -19,10 +19,20 @@ export class CircleNumber{
         s = s || 1;
         this.position.x+=s;
     }
-    increaseRadius(){
+    moveUpwards(s){
+        s = s || 1;
+        this.position.y+=s;
+    }
+    moveDownwards(s){
+        s = s || 1;
+        this.position.y-=s;
+    }
+    increaseRadius(r){
+        r = r || 1;
         this.radius++;
     }
-    decreaseRadius(){
+    decreaseRadius(r){
+        r = r || 1;
         if(this.radius <= 0) return;
         this.radius--;
     }

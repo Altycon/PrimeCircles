@@ -33,3 +33,10 @@ export function isPrime(nbr){
         if(nbr%i === 0) return false;
     return nbr > 1;
 }
+
+export const setInputValue = (input,min,max,startValue,step)=>{
+    input.setAttribute('min',min);
+    input.setAttribute('max',max);
+    input.setAttribute('value',startValue);
+    input.setAttribute('step',step);
+}

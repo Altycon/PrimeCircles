@@ -8,6 +8,11 @@ export class CircleNumberSet{
         this.totalCirlces = totalCirlces;
         this.width = w;
         this.height = h;
+        this.speed = 1;
+        this.isMovingRight = false;
+        this.isMovingLeft = false;
+        this.isMovingUp = false;
+        this.isMovingDown = false;
         this.set = [];
         this.numberRendered = 0;
         for(let i = 0; i < this.totalCirlces; i++){
@@ -17,9 +22,29 @@ export class CircleNumberSet{
             this.set.push(new CircleNumber(x,y,radius,this.number));
         }
     }
+    moveSetRight(){
+        this.set.forEach( num => {
+            num.moveToRight(this.speed);
+        })
+    }
+    moveSetLeft(){
+        this.set.forEach( num => {
+            num.moveToLeft(this.speed);
+        })
+    }
+    moveSetUp(){
+        this.set.forEach( num => {
+            num.moveUpwards(this.speed);
+        })
+    }
+    moveSetDown(){
+        this.set.forEach( num => {
+            num.moveDownwards(this.speed);
+        })
+    }
     renderSet(ctx){
         for(let i = 0; i < this.set.length; i++){
-            if(this.set[i].position.x < this.width){
+            if(this.set[i].position.x < this.width + this.set[i].radius && this.set[i].position.x > -this.set[i].radius){
                 this.set[i].render(ctx);
                 this.numberRendered++;
             }

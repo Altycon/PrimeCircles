@@ -1,4 +1,4 @@
-import { random, scale, getWidth, getHeight, fixCanvas, isPrime} from "./utilities.js";
+import { random, scale, getWidth, getHeight, fixCanvas, setInputValue} from "./utilities.js";
 import { CircleNumber } from "./circle-number.js";
 import { CircleNumberSet } from "./circle-number-set.js";
 // Canvas
@@ -9,50 +9,65 @@ const DPI = devicePixelRatio;
 // Buttons
 const MOVE_LEFT_BUTTON = document.getElementById('MLB'),
 MOVE_RIGHT_BUTTON = document.getElementById('MRB'),
-INCREASE_RADIUS = document.getElementById('ICRB'),
-DECREASE_RADIUS = document.getElementById('DCRB');
+MOVE_UP_BUTTON = document.getElementById('MUB'),
+MOVE_DOWN_BUTTON = document.getElementById('MDB'),
+SPEED_SLIDER = document.getElementById('SpeedSlider');
 
-const CONSTANT_RADIUS = 10;
+const CONSTANT_RADIUS = 1;
 const SETS = [];
-const NUMBER_OF_SETS = 30;
+const NUMBER_OF_SETS = Math.floor(innerHeight*0.4);
+console.log(NUMBER_OF_SETS)
 
 function moveLeft(ev){
     ev.preventDefault();
-    SETS.forEach( num => {
-        num.set.forEach( set => {
-            set.moveToLeft(50);
-        })
+    SETS.forEach( set => {
+        set.isMovingLeft = true;
     })
 };
 function moveRight(ev){
     ev.preventDefault();
-    SETS.forEach( num => {
-        num.set.forEach( set => {
-            set.moveToRight(50);
-        })
+    SETS.forEach( set => {
+        set.isMovingRight = true;
     })
 };
-function IncreaseRes(ev){
+function stopMoving(){
+    SETS.forEach( set => {
+        set.isMovingRight = false;
+        set.isMovingLeft = false;
+        set.isMovingUp = false;
+        set.isMovingDown = false;
+    })
+}
+function moveUp(ev){
     ev.preventDefault();
-    SETS.forEach( num => {
-        num.set.forEach( set => {
-            set.increaseRadius(2);
-        })
+    SETS.forEach( set => {
+        set.isMovingUp = true;
     })
 };
-function DecreaseRes(ev){
+function moveDown(ev){
     ev.preventDefault();
-    SETS.forEach( num => {
-        num.set.forEach( set => {
-            set.decreaseRadius(2);
-        })
+    SETS.forEach( set => {
+        set.isMovingDown = true;
     })
 };
+function changeSpeed(ev){
+    const value = +ev.currentTarget.value;
+    document.getElementById('SpeedDisplay').innerText = value.toString();
+    SETS.forEach( set => {
+        set.speed = value;
+    })
+}
 const isLoaded = ()=>{
+    setInputValue(SPEED_SLIDER, 0, 100, 20, 1);
     MOVE_LEFT_BUTTON.addEventListener('pointerdown', moveLeft);
-    MOVE_RIGHT_BUTTON.addEventListener('click', moveRight);
-    INCREASE_RADIUS.addEventListener('click', IncreaseRes);
-    DECREASE_RADIUS.addEventListener('click', DecreaseRes);
+    MOVE_LEFT_BUTTON.addEventListener('pointerup', stopMoving);
+    MOVE_RIGHT_BUTTON.addEventListener('pointerdown', moveRight);
+    MOVE_RIGHT_BUTTON.addEventListener('pointerup', stopMoving);
+    MOVE_UP_BUTTON.addEventListener('pointerdown', moveUp);
+    MOVE_UP_BUTTON.addEventListener('pointerup', stopMoving);
+    MOVE_DOWN_BUTTON.addEventListener('pointerdown', moveDown);
+    MOVE_DOWN_BUTTON.addEventListener('pointerup', stopMoving);
+    SPEED_SLIDER.addEventListener('input', changeSpeed)
 };
 
 const init = ()=>{
@@ -75,7 +90,20 @@ function animateCanvas(PC_CTX, SETS){
         
         PC_CTX.clearRect(0,0,w,h);
         for(let j = 0; j < SETS.length; j++){
-            SETS[j].renderSet(PC_CTX);
+            const SET = SETS[j];
+            if(SET.isMovingRight){
+                SET.moveSetRight();
+            }
+            if(SET.isMovingLeft){
+                SET.moveSetLeft();
+            }
+            if(SET.isMovingUp){
+                SET.moveSetUp();
+            }
+            if(SET.isMovingDown){
+                SET.moveSetDown();
+            }
+            SET.renderSet(PC_CTX);
         }
         requestAnimationFrame(animate);
     }
